@@ -1,0 +1,129 @@
+% document class settings
+\documentclass[12pt, a4paper]{article}
+
+% encoding
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% opmaak
+\usepackage{microtype}
+\usepackage{XCharter}
+\usepackage[T1]{eulervm}
+\usepackage[margin=2.5cm]{geometry}
+
+\usepackage{titlesec}
+
+% regelafstand
+\usepackage{setspace}
+\onehalfspacing%
+
+% header & footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[L]{\small\itshape~Introduction to Stata Programming}%
+\fancyhead[R]{\small\itshape\leftmark~}%
+\fancyfoot[C]{\thepage}%
+\setlength{\headheight}{14pt}%
+\renewcommand{\sectionmark}[1]{%
+  \markboth{#1}{}}%
+
+% bibliography
+\usepackage[style=apa,natbib]{biblatex}
+\addbibresource{references.bib}
+
+
+% hyperlinks
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  allcolors=black,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue,
+  linktocpage=true,
+  hypertexnames=false
+}
+% easy references to tables/figures etc, not sure yet if necessary
+\usepackage[capitalise,noabbrev]{cleveref}
+
+% less "hanging" text at bottom or top of pages
+\widowpenalty=10000
+\clubpenalty=10000
+
+
+\begin{document}
+
+\input{Sections/titlepage}
+
+\tableofcontents
+\markboth{Contents}{}
+
+\newcommand{\sectionbreak}{%
+  \par%
+  \begin{center}---\texttt{*}---\end{center}%
+  \clearpage%
+}%
+
+\section{Introduction}
+
+Reader with advanced tips and tricks for Stata.
+I'll add some introductory text about the reader here.
+Incomplete sections will have a very short description of what will be described in them.
+Could include some information about the thesis project, AEclipse, and maybe myself.
+I assume some knowledge of and/or experience with both Stata and programming in general.
+Comments and feedback are always welcome.
+
+\section{Information Management}
+
+Section for some ``basic'' commands that are either a prerequisite for programming or make it much easier.
+
+\subsection{help}
+
+help command
+
+\subsection{scalars and matrices}
+
+storing information in scalars and matrices
+
+\subsection{display}
+
+display command
+
+\subsection{macros}
+
+globals and locals
+
+\subsection{loops}
+
+different types of loops
+
+\section{Custom Commands}
+
+Section on how to write a custom command.
+
+\subsection{program}
+
+defining a program
+
+\subsection{arguments}
+
+adding user input to a program
+
+\subsection{syntax}
+
+adding standard Stata syntax to a program
+
+\subsection{temporary variables}
+
+using temporary variables
+
+\subsection{output}
+
+defining program output
+
+\section{General Tips}
+
+Things I found helpful in using Stata.
+%\printbibliography
+
+\end{document}
