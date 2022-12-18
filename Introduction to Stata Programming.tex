@@ -17,8 +17,19 @@
 % code blocks
 \usepackage[outputdir=build]{minted}
 \usemintedstyle{stata}
-\setminted{autogobble=true,fontsize=\footnotesize,frame=lines,linenos=true}
+\setminted{
+  autogobble=true,
+  fontsize=\footnotesize,
+  frame=lines,
+  linenos=true,
+  bgcolor=azure
+}
 \usepackage{xcolor}
+\definecolor{azure}{rgb}{0.93, 0.96, 0.96}
+
+%figures
+\usepackage{graphicx}
+\graphicspath{ {./figures} }
 
 % regelafstand
 \usepackage{setspace}
@@ -50,7 +61,7 @@
   linktocpage=true,
   hypertexnames=false
 }
-% easy references to tables/figures etc, not sure yet if necessary
+% easy references to tables/figures etc
 \usepackage[capitalise,noabbrev]{cleveref}
 
 % less "hanging" text at bottom or top of pages
@@ -78,6 +89,10 @@
 \section{Information Management}
 
 \input{Sections/information}
+
+\section{Automation}
+
+\input{Sections/automation}
 
 \section{Custom Commands}
 
