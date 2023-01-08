@@ -53,14 +53,93 @@ generally leading to more information on whatever is written down.\footnote{~Not
   \includegraphics[width=0.85\textwidth]{helpsummarize}
 \end{figure}
 
-\subsection{scalars and matrices}
+\subsection{Scalars and matrices}
 
-storing information in scalars and matrices
+Rather than storing information in variables,
+Stata offers us a couple of different ways of storing information independently of a datset.
+Scalars and matrices are perhaps the most basic of these options.
+Other than the names suggest, scalars are not limited to containing only numbers:
+we are free to store other types of information such as strings in them as well.
+Matrices can only contain numerical values, on the other hand.
+Another difference between the two is the amount of information stored:
+a scalar contains a single piece of information,
+whereas a matrix can contain multiple pieces of information.
 
-\subsection{display}
+Scalars can be created using the \mintinline{stata}{scalar define} command,
+although the \mintinline{stata}{define} can be left out.
+For example,
+if I want to create a scalar containing the number 7,
+I could type:
+\begin{minted}{stata}
+  scalar define number = 7
+\end{minted}
 
-display command
+After running this line of code -- either through a do-file or the Stata console -- Stata has now created a scalar with the name ``number'' that contains the numerical value 7.
+Naturally, we cannot always remember every piece of information we have stored.
+If we want to know what scalars currently exist in Stata's memory, we use another command:
+\begin{minted}{stata}
+  scalar define number = 7
+  scalar define second = "two"
+  scalar list
+\end{minted}
+After running the second command, Stata returns us a list of all scalars with both their name and value:
+\small\begin{verbatim}
+  . scalar list
+      second = two
+      number =          7
+\end{verbatim}\normalsize
+Note that we can also type \mintinline{stata}{dir} instead of \mintinline{stata}{list} and obtain the same result.
+
+Compared to scalars, matrices are both more versatile and more complicated to work with.
+As they store multiple pieces of information, every piece of information also needs a position.
+Creating a matrix is slightly different compared to creating a scalar:
+\begin{minted}{stata}
+  matrix input numbers = ( 7 , 2 \ 1 , 2)
+\end{minted}
+This creates a two by two matrix (i.e.\ two rows and two columns),
+containing the values 7 and 2 in the first row and the values 1 and 2 in the second row.
+In this command, commas seperate row values while backslashes start a new row.
+Again, \mintinline{stata}{input} can be omitted when creating a matrix.
+There is also a \mintinline{stata}{matrix define} command,
+but this is used when we do computations with already existing matrices.
+\mintinline{stata}{input} is used when inputting matrices by hand.
+
+To see existing matrices, we use two commands:
+\begin{minted}{stata}
+  matrix input numbers = ( 7 , 2 \ 1 , 2)
+  matrix dir
+  matrix list numbers
+\end{minted}
+The first of these shows us a list of all matrices in Stata's memory and their size,
+while the second command shows us the values of the matrix called ``numbers'':
+\small\begin{verbatim}
+  .   matrix dir
+        numbers[2,2]
+
+  .   matrix list numbers
+
+  numbers[2,2]
+      c1  c2
+  r1   7   2
+  r2   1   2
+\end{verbatim}\normalsize
+
+Finally,
+we can remove scalars and matrices from Stata's memory using their respective command followed by \mintinline{stata}{drop}:
+\begin{minted}{stata}
+scalar drop _all
+matrix drop numbers
+\end{minted}
+We can remove a specific scalar or matrix by specifying its name,
+or we can remove all existing scalars or matrices by typing \mintinline{stata}{_all} instead of a name.
+Scalars and matrices are also removed from memory when you close Stata itself or when you issue the \mintinline{stata}{clear all} command.
+
+The \mintinline{stata}{help} file for both commands provide a lot more information on both scalars and matrices, especially so for the latter.
 
 \subsection{macros}
 
 globals and locals
+
+\subsection{display}
+
+display command
