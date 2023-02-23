@@ -15,8 +15,12 @@
 \usepackage{titlesec}
 
 % code blocks
-\usepackage[outputdir=build]{minted}
+\usepackage{caption}
+\usepackage[outputdir=build,newfloat]{minted}
 \usemintedstyle{stata}
+%\renewcommand\listingscaption{Example code}
+\captionsetup[listing]{position=top, name=Example code}
+\SetupFloatingEnvironment{listing}{name=Example code,listname=Example Code}
 \setminted{
   autogobble=true,
   fontsize=\footnotesize,
@@ -26,6 +30,18 @@
 }
 \usepackage{xcolor}
 \definecolor{azure}{rgb}{0.93, 0.96, 0.96}
+
+
+% from https://tex.stackexchange.com/questions/83204/how-can-i-make-source-code-included-with-minted-copyable
+\usepackage{accsupp}
+\newcommand\emptyaccsupp[1]{\BeginAccSupp{ActualText={}}#1\EndAccSupp{}}
+
+% default definition is: \def\theFancyVerbLine{\rmfamily\tiny\arabic{FancyVerbLine}}
+\let\theHFancyVerbLine\theFancyVerbLine% don't apply our patch to hyperref's version
+\def\theFancyVerbLine{\rmfamily\tiny\emptyaccsupp{\arabic{FancyVerbLine}}}
+\newcommand{\inputst}[1]{\inputminted{stata}{./Example do-files/#1}}
+\newcommand{\st}[1]{\mintinline{stata}{#1}}%
+
 
 %figures
 \usepackage{graphicx}
@@ -63,6 +79,7 @@
 }
 % easy references to tables/figures etc
 \usepackage[capitalise,noabbrev]{cleveref}
+\crefname{listing}{Example code}{Example code}
 
 % less "hanging" text at bottom or top of pages
 \widowpenalty=10000
@@ -81,6 +98,8 @@
   \begin{center}---\texttt{*}---\end{center}%
   \clearpage%
 }%
+\listoflistings
+
 
 \section{Introduction}
 

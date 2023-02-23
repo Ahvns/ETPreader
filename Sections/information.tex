@@ -18,7 +18,7 @@ As useful as it is, the help-files might seem daunting at first.
 Understanding their structure is key to (quickly) obtain information without falling into despair.
 I'll highlight what I believe to be the most important parts of the help-files through an example.
 
-If I type \mintinline{stata}{help summarize},
+If I type \st{help summarize},
 Stata opens the window in \cref{fig:hlpsum}.
 In help-files, the typography on its own already gives us a lot of information.
 
@@ -35,10 +35,10 @@ Optional arguments and functions are indicated by being [in brackets].
 This means that anything that is written within brackets in the syntax is something that does not have to be specified for a command to work.
 
 \underline{Underlined} text indicates the \emph{minimum} abbreviation of a command or option.
-In the case of \mintinline{stata}{summarize},
-I could simply write \mintinline{stata}{su}.
+In the case of \st{summarize},
+I could simply write \st{su}.
 Additional letters are also allowed and how to use this is mostly personal preference.
-Personally, I always write \mintinline{stata}{sum} as its clearer to me what that means than \mintinline{stata}{su} would,
+Personally, I always write \st{sum} as its clearer to me what that means than \st{su} would,
 but it still saves me the time and space from writing the command out in its entirety.
 When abbreviating commands,
 make sure you are familiar enough with them to remember what an abbreviation means if you open your do-files one week later.
@@ -53,7 +53,9 @@ generally leading to more information on whatever is written down.\footnote{~Not
   \includegraphics[width=0.85\textwidth]{helpsummarize}
 \end{figure}
 
-\subsection{Scalars and matrices}
+\subsection{Storing Information}
+
+\subsubsection{Scalars and matrices}
 
 Rather than storing information in variables,
 Stata offers us a couple of different ways of storing information independently of a datset.
@@ -65,8 +67,8 @@ Another difference between the two is the amount of information stored:
 a scalar contains a single piece of information,
 whereas a matrix can contain multiple pieces of information.
 
-Scalars can be created using the \mintinline{stata}{scalar define} command,
-although the \mintinline{stata}{define} can be left out.
+Scalars can be created using the \st{scalar define} command,
+although the \st{define} can be left out.
 For example,
 if I want to create a scalar containing the number 7,
 I could type:
@@ -88,7 +90,7 @@ After running the second command, Stata returns us a list of all scalars with bo
       second = two
       number =          7
 \end{verbatim}\normalsize
-Note that we can also type \mintinline{stata}{dir} instead of \mintinline{stata}{list} and obtain the same result.
+Note that we can also type \st{dir} instead of \st{list} and obtain the same result.
 
 Compared to scalars, matrices are both more versatile and more complicated to work with.
 As they store multiple pieces of information, every piece of information also needs a position.
@@ -99,10 +101,10 @@ Creating a matrix is slightly different compared to creating a scalar:
 This creates a two by two matrix (i.e.\ two rows and two columns),
 containing the values 7 and 2 in the first row and the values 1 and 2 in the second row.
 In this command, commas seperate row values while backslashes start a new row.
-Again, \mintinline{stata}{input} can be omitted when creating a matrix.
-There is also a \mintinline{stata}{matrix define} command,
+Again, \st{input} can be omitted when creating a matrix.
+There is also a \st{matrix define} command,
 but this is used when we do computations with already existing matrices.
-\mintinline{stata}{input} is used when inputting matrices by hand.
+\st{input} is used when inputting matrices by hand.
 
 To see existing matrices, we use two commands:
 \begin{minted}{stata}
@@ -125,21 +127,70 @@ while the second command shows us the values of the matrix called ``numbers'':
 \end{verbatim}\normalsize
 
 Finally,
-we can remove scalars and matrices from Stata's memory using their respective command followed by \mintinline{stata}{drop}:
+we can remove scalars and matrices from Stata's memory using their respective command followed by \st{drop}:
 \begin{minted}{stata}
 scalar drop _all
 matrix drop numbers
 \end{minted}
 We can remove a specific scalar or matrix by specifying its name,
-or we can remove all existing scalars or matrices by typing \mintinline{stata}{_all} instead of a name.
-Scalars and matrices are also removed from memory when you close Stata itself or when you issue the \mintinline{stata}{clear all} command.
+or we can remove all existing scalars or matrices by typing \st{_all} instead of a name.
+Scalars and matrices are also removed from memory when you close Stata itself or when you issue the \st{clear all} command.
 
-The \mintinline{stata}{help} file for both commands provide a lot more information on both scalars and matrices, especially so for the latter.
+The \st{help} file for both commands provide a lot more information on both scalars and matrices, especially so for the latter.
+Also note that, especially for matrices, a lot is possible using Stata's underlying programming language Mata.
+Unless you plan on writing elaborate and complex estimation commands,
+you will likely never need or encounter Mata;
+it is thus beyond the scope of this reader -- for now.\footnote{~At the moment, I do not have a lot experience with Mata yet, either. Although writing a guide on it would likely be a quick way for me to learn it, I do not it would add much value for the reader. I might change my mind about this later, though.}
 
-\subsection{macros}
+\subsubsection{Macros}
 
-globals and locals
+Stata recognises two types of macros: \st{global}s and \st{local}s.
+If you are not familiar with the term,
+a macro is basically a shorthand or abbreviation:
+instead of repeatedly typing out some very long string of characters,
+we can define and use a macro instead, saving space, time,
+and keeping our code much more organised.
 
+\paragraph{Locals}
+Of the two macro types, the local is most common.
+The major (dis)advantage of a local is that Stata ``forgets'' it after running the code it is defined in.
+This means we cannot use locals interactively:
+if we define a local in Stata's command line,
+it will be gone by the time we execute a second command.
+At the same time,
+this also means we can repeatedly redefine the contents of a local without having to drop it after every time we run a block of code,
+and, more importantly, locals in our programs won't interfere with locals of other programs.
+
+The basic syntax for defining a local is relatively simple:
+\begin{minted}{stata}
+local name contents
+\end{minted}
+All we need is to indicate that we are defining a \st{local}, give it a name,
+and provide its content.
+To use the local, we need to tell Stata to expand it in our following command(s).
+We do this by surrounding the local's name by a single opening and closing quote, i.e. \st{`name'}.
+Note that you \emph{have} to use the separate opening and closing quote characters,
+using a single closing quote twice --
+as you would in a regular text processor such as Word\footnote{%
+~Most modern text processors automatically change the straight quotes of our keyboard into opening or closing quotes,
+depending on the surrounding characters.
+Most programming environments don't:
+you generally aren't writing text in a programming environment, but code.} --
+will generally cause Stata to return an error,
+as it does not recognise our local as such.
+In short: write \st{`name'}, not \st{'name'}.
+
+To make the concept a little less abstract, I'll provide an example.
+Suppose you have a large amount of regressions or other estimation commands you want to run,
+all with the same control variables.
+Instead of typing out all the variable names every time,
+we can define a local with the variable names and use that instead.
+You can copy the code in \cref{lst:local} into a do-file and try for yourself!
+
+\begin{listing}[htp]
+\caption{using a local for control variables}\label{lst:local}
+\inputst{local.do}
+\end{listing}
 \subsection{display}
 
 display command
