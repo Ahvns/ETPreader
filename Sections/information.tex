@@ -6,7 +6,7 @@ I take information as a starting point,
 and this section is all about obtaining and storing various forms of information.
 
 
-\subsection{The \texttt{help} command}
+\subsection{The \texttt{help} command}\label{sec:hlp}
 
 Perhaps the most important command in Stata,
 \texttt{help} allows quick access to information on \emph{any} command Stata has.
@@ -185,12 +185,108 @@ Suppose you have a large amount of regressions or other estimation commands you 
 all with the same control variables.
 Instead of typing out all the variable names every time,
 we can define a local with the variable names and use that instead.
-\cref{lst:local} does just this, and you can copy the code\footnote{The code is also available to download as a do-file on the reader's GitHub page \href{https://github.com/Ahvns/ETPreader/tree/main/Example\%20do-files}{here}. Later example codes will all be available to download there as well.} into a do-file and try for yourself.
+\cref{lst:local} does just this, and you can copy the code into a do-file and try for yourself.\footnote{%
+The code is also available to download as a do-file on the reader's GitHub page \href{https://github.com/Ahvns/ETPreader/tree/main/Example\%20do-files}{here}.
+Later example codes will all be available to download there as well.}
 
 \begin{listing}[htp]
 \caption{local.do}\label{lst:local}
 \inputst{local.do}
 \end{listing}
-\subsection{display}
 
-display command
+\paragraph{Globals}
+Where a local is a \emph{private} macro available only to the code it is defined in,
+a global is a \emph{public} macro and is available to other programs or code as well.
+While this can be very helpful for anything used often in more than just a single do-file or program, this comes with a caveat.
+Every global name is available only once,
+i.e. if one program defines a global named ``myglobal'',
+any other program attempting to define a global with this name will overwrite the previous contents of ``myglobal''.
+This can therefore interfere when running code written by others:
+if their code uses or defines a global with the same name as one of your globals,
+either their code or yours will likely not work as intended.
+It is thus best practice to avoid using globals wherever possible,
+e.g. by using locals instead.
+
+Nevertheless, globals do have their uses.
+An example would be to define the path to the folder in your current project,
+so you can use the global instead of typing out the entire path every time you would refer to some file.\footnote{%
+While this helps in making sure your code always uses the correct files,
+you can also open Stata from the project folder and refer directly to file names.
+The downside of the latter method is that you always need to make sure Stata has the correct working directory when executing your code.
+You can check and change the current working directory with the commands \st{pwd} and \st{cd}, respectively.}
+
+The syntax for globals is slightly different compared to locals, but they are otherwise handled in the same manner.
+To define a global, we type \st{global name contents} and we can expand a global by affixing a dollar sign before its name, like so: \st{$name}. $\) % added inline math to stop syntax highlighting
+
+\paragraph{General remarks and usage tips}
+Before moving on, I'd like to highlight several other ways to manipulate or define macros.
+Instead of simply storing information we spell out,
+a macro can also be defined through an \emph{expression} or through a \emph{macro function}.
+To put it simply,
+using an expression tells Stata to evaluate the expression and store the result,
+while a macro function tells Stata to obtain the information defined through the function.
+The syntax for using an expression is \st{local name =expression},
+and the syntax for using a macro function is \st{local name : function}.
+
+To illustrate the use of an expression, consider the following code:
+\begin{minted}{stata}
+local sum 1 + 1
+local sum2 = 1 + 1
+\end{minted}
+When we evaluate these, the first (\st{`sum'}) will expand to \st{1 + 1},
+while the second (\st{`sum2'}) will expand to \st{2}.
+By using an expression,
+we basically told Stata to calculate 1 + 1 and store the result of that.
+The reason Stata does not evaluate the contents in the first local is that unless specified otherwise,
+Stata implicitly places quotes surrounding the contents.
+In other words, writing \st{local name contents} is exactly the same as writing \st{local name "contents"}.
+Of course, there are cases where we would want to manually add quotes,
+but I'll get into the details of using quotes in Stata programming later.
+For a list of available macro functions, see \st{help macro#macro_fcn}.
+
+After defining a macro, we can manipulate it in the same manner as defining it.
+To do this, we simply define the macro again: \st{local name contents}.
+This will simply throw away the previous contents and store whatever new contents you define.
+If we want to keep the previous contents,
+we can expand the current local inside its new contents:
+\st{local name `name' newcontents} or \st{local name newcontents `name'}.
+This would add new content to the local after or before the current contents,
+respectively.
+
+We can also use locals as a sort of counter.
+If we define a local as an integer,
+we can use a shorthand for incrementing the local.
+For example:
+\begin{minted}{stata}
+loc counter 1
+loc counter = `counter' + 1
+loc ++counter
+loc counter++
+\end{minted}
+After defining the local in the first line,
+lines 2--4 all increment the local by one,
+so that the local expands to 4 if it is used afterward.
+This is mainly useful when using a local inside loops,
+which we will get into later in this reader.
+
+In general, macros are extremely flexible,
+especially if we combine the several ways of manipulating them.
+I wholeheartedly recommend practicing a bit in using them,
+as they can save an enormous amount of time spent coding --
+both by reducing the amount you need to type out and by making your code much more readable.
+
+\subsection{Inspecting and Obtaining Information}
+Now that we now how to store information,
+we also need to consider how to obtain information or inspect what information has been stored.
+I've already covered how to find information on commands (\cref{sec:hlp}),
+and you've likely inspected a dataset before using the \st{describe} or \st{browse} commands.
+These are all very helpful, but it is now time to delve into handling nitty-gritty specific pieces of information.
+
+\subsubsection{The \texttt{display} command}
+The \st{display} command is one of -- if not the -- most used commands for me while programming.
+It's function is quite simple: it displays whatever you tell it to in Stata's output window.
+Furthermore, it evaluates whatever you tell it to display (unless specified otherwise),
+so you can also use it as a calculator if you so desire.
+The basic syntax is as follows: \st{display contents}.
+If we insert any sort of calculation, display gives us the results:
+\st{di 1 + 1} returns \st{2}.
