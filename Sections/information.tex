@@ -38,10 +38,13 @@ This means that anything that is written within brackets in the syntax is someth
 In the case of \st{summarize},
 I could simply write \st{su}.
 Additional letters are also allowed and how to use this is mostly personal preference.
-Personally, I always write \st{sum} as its clearer to me what that means than \st{su} would,
+Personally, I always write \st{sum} as it's clearer to me what that means than \st{su},
 but it still saves me the time and space from writing the command out in its entirety.
 When abbreviating commands,
-make sure you are familiar enough with them to remember what an abbreviation means if you open your do-files one week later.
+make sure you are familiar enough with them to remember what an abbreviation means if you open your do-files one week later.\footnote{%
+To get you used to abbreviated commands,
+I'll abbreviate most commands as I would do when using them in my own code after I have introduced them.
+The other reason is that I'm lazy and don't like typing.}
 Having to look it up every time you see an abbreviation can be quite a pain.
 
 Finally, any text in \textcolor{blue}{blue} is a hyperlink,
@@ -75,18 +78,22 @@ I could type:
 \begin{minted}{stata}
   scalar define number = 7
 \end{minted}
+but also:
+\begin{minted}{stata}
+    scalar number = 7
+\end{minted}
 
 After running this line of code -- either through a do-file or the Stata console -- Stata has now created a scalar with the name ``number'' that contains the numerical value 7.
 Naturally, we cannot always remember every piece of information we have stored.
 If we want to know what scalars currently exist in Stata's memory, we use another command:
 \begin{minted}{stata}
-  scalar define number = 7
-  scalar define second = "two"
-  scalar list
+  sca def number = 7
+  sca second = "two"
+  sca list
 \end{minted}
 After running the second command, Stata returns us a list of all scalars with both their name and value:
 \small\begin{verbatim}
-  . scalar list
+  . sca list
       second = two
       number =          7
 \end{verbatim}\normalsize
@@ -109,16 +116,16 @@ but this is used when we do computations with already existing matrices.
 To see existing matrices, we use two commands:
 \begin{minted}{stata}
   matrix input numbers = ( 7 , 2 \ 1 , 2)
-  matrix dir
-  matrix list numbers
+  mat dir
+  mat list numbers
 \end{minted}
 The first of these shows us a list of all matrices in Stata's memory and their size,
 while the second command shows us the values of the matrix called ``numbers'':
 \small\begin{verbatim}
-  .   matrix dir
+  .   mat dir
         numbers[2,2]
 
-  .   matrix list numbers
+  .   mat list numbers
 
   numbers[2,2]
       c1  c2
@@ -129,8 +136,8 @@ while the second command shows us the values of the matrix called ``numbers'':
 Finally,
 we can remove scalars and matrices from Stata's memory using their respective command followed by \st{drop}:
 \begin{minted}{stata}
-scalar drop _all
-matrix drop numbers
+sca drop _all
+mat drop numbers
 \end{minted}
 We can remove a specific scalar or matrix by specifying its name,
 or we can remove all existing scalars or matrices by typing \st{_all} instead of a name.
@@ -230,8 +237,8 @@ and the syntax for using a macro function is \st{local name : function}.
 
 To illustrate the use of an expression, consider the following code:
 \begin{minted}{stata}
-local sum 1 + 1
-local sum2 = 1 + 1
+loc sum 1 + 1
+loc sum2 = 1 + 1
 \end{minted}
 When we evaluate these, the first (\st{`sum'}) will expand to \st{1 + 1},
 while the second (\st{`sum2'}) will expand to \st{2}.
