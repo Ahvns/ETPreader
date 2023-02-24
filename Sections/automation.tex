@@ -1,7 +1,7 @@
 
 In this section we'll go over several commands that can be very useful for automating certain bits of code.
 
-\subsection{Grouped command execution}
+\subsection{Grouped Command Execution}
 One of the easiest ways we can repeat a certain command for different groups of observations is with the \st{bysort} prefix.
 This prefix lets us run the command we use it with for every group defined by a variable separately.
 In my experience it's mostly useful for generating variables in programming,
@@ -19,7 +19,98 @@ The \st{by} prefix does not work without sorting the data, so it is generally ea
 \end{listing}
 
 \subsection{Conditionals}
+Conditionals, or if-statements, are where the real fun stuff begins.
+To put it simply,
+they allow us to differentiate our code based on anything we can turn into an expression that evaluates to true or false.
+Stata recognises two types of if-statements: one as a command suffix,
+and one for programming.
 
+\subsubsection{Command suffix if}
+The command suffix if statement is the simpler of the two.
+By adding an if-statement to the end of a command (but before the options!) we tell Stata to only use the specified subset of our data.
+Suppose we have some individual-level data with a dummy variable \st{female} indicating an individual's gender, i.e. it is 1 for females and 0 for males.
+We can then tell a command, such as \st{summarize},
+to only use the observations for female individuals by typing \st{sum varlist if female == 1}.
+As we're using a dummy variable, we could even shorten this to \st{sum varlist if female}!
+This is because our expression, \st{female == 1},
+evaluates either to true or false for each observation.
+A variable containing either true or false is also known as a \emph{boolean} and is generally stored as either a value of 1 (true) or 0 (false).
+Dummy variables are structured in the same way:
+they have a value of 1 if something is true,
+such as an individual's gender being female,
+or 0 if false.
+We can thus exploit this to make much more compact if-statements.
+
+We can also use non-binary variables for our if-statements,
+which allows us to use the full breadth of Stata's relational operators.
+Furthermore, we can combine several if-statements using logic operators,
+such as and, not, and or.
+For the specific characters of each operator, see \st{help operator}.
+The key takeway here is that any expression following \st{if} will evaluate to either true (1) or false (0).
+If the statement evaluates to true for an observation it is used,
+and if it evaluates to false it is left out.
+
+On this note,
+a quick tip for generating dummy variables.
+Often people (including past me) do this in a roundabout way:
+\begin{minted}{stata}
+generate dummy = 1 if expression
+replace dummy = 0 if dummy == . // missing
+\end{minted}
+As any if-statement already evaluates to either 1 or 0,
+it is much simpler (and cleaner) to write:
+\begin{minted}{stata}
+generate dummy if expression
+\end{minted}
+If you work with a lot of dummy variables, this will save a lot of time!
+
+\subsubsection{Programming if}
+Stata's programming if-statements have a multitude of uses.
+They allow us to execute bits of code only if a specified expression is true.
+For a single command,
+the syntax is as follows:
+\begin{minted}{stata}
+if expression command
+\end{minted}
+where the expression works in the same way as in the suffix if-statement.
+In programming if-statements,
+you probably won't be using variable names,
+but rather locals or scalars that you defined previously.
+Of course,
+you are free to do as you like:
+locals and scalars can also be used in suffix if-statements,
+and variables can be used in programming if-statements,
+although the latter will generally include an observation number to identify a specific value.\footnote{I.e.\ by writing \st{varname[number]} instead of simply \st{varname}}
+
+We can also include multiple commands in a single if-statement.
+The syntax for this is slightly different:
+\begin{minted}{stata}
+if expression {
+    command1
+    command2
+    ...
+}
+\end{minted}
+Should the expression evaluate to true,
+Stata will execute all commands enclosed by the curly brackets.
+Note that no command may follow the opening curly bracket (comments are fine) in the same line,
+and the closing curly bracket must have a line just for itself.
+While not necessary,
+I recommend indenting the commands inside a code block like this to keep your code organised.
+
+After a programming if-statement,
+we can follow up with \st{else}.
+The code following an else-statement executes when the if-statement is evaluated to be false.
+An else-statement is written in the same way as an if-statement, except no expression is given.
+Using both looks like this:
+\begin{minted}{stata}
+if expression {
+    commands // these are executed if true
+}
+else {
+    othercommands // these are executed if false
+}
+\end{minted}
 
 \subsection{loops}
 
