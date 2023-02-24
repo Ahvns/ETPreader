@@ -362,3 +362,31 @@ The \st{display} command also has options to format the output.
 While they don't make much of a difference for things like troubleshooting,
 they can be nice if you're writing an extensive program and want to differentiate between specific types of output.
 The options and an example of their use are provided in the official help file: \st{help display}.
+
+\subsubsection{Results of other commands}
+While working with Stata,
+you probably don't want to write every bit of code from scratch:
+there are already tons of useful commands available -- shipped with Stata or written by other users, so why not build on those?
+Luckily,
+Stata stores lots of information obtained and produced by any well-written command.
+In general, (almost) all Stata commands are either \emph{r-class} or \emph{e-class},
+corresponding to general commands and estimation commands, respectively.
+General commands store their results in \st{r()} objects,
+while estimation commands store their results in \st{e()} objects.
+To access these results, we need to know the name of the object they are stored in.
+Of course, there is a command to find out the names of the available objects.
+For general commands we use \st{return list}, while we use \st{ereturn list} for estimation commands.
+There is also a \emph{c-class} with \st{c()} objects,
+but they are not related to commands and always available.
+We can use \st{creturn list} for these.
+\cref{lst:return} provides an example how to use this.
+
+\begin{listing}[htp]
+    \caption{return.do}\label{lst:return}
+    \inputst{return.do}
+\end{listing}
+
+Note that we do not have to use the various return commands every time we want to access one their corresponding objects;
+they simply list what is available.
+In a similar manner to how I display the contents of the objects in \cref{lst:return},
+we can also store them in locals or use them in pretty much any other way you can think of.
