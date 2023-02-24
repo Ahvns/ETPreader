@@ -35,10 +35,9 @@
 % from https://tex.stackexchange.com/questions/83204/how-can-i-make-source-code-included-with-minted-copyable
 \usepackage{accsupp}
 \newcommand\emptyaccsupp[1]{\BeginAccSupp{ActualText={}}#1\EndAccSupp{}}
-
-% default definition is: \def\theFancyVerbLine{\rmfamily\tiny\arabic{FancyVerbLine}}
-\let\theHFancyVerbLine\theFancyVerbLine% don't apply our patch to hyperref's version
+\let\theHFancyVerbLine\theFancyVerbLine
 \def\theFancyVerbLine{\rmfamily\tiny\emptyaccsupp{\arabic{FancyVerbLine}}}
+
 \newcommand{\inputst}[1]{\inputminted{stata}{./Example do-files/#1}}
 \newcommand{\st}[1]{\mintinline{stata}{#1}}%
 
@@ -60,6 +59,12 @@
 \setlength{\headheight}{14pt}%
 \renewcommand{\sectionmark}[1]{%
   \markboth{#1}{}}%
+
+% footnote spacing
+\makeatletter%
+\long\def\@makefntext#1{%
+  \parindent 1em\noindent \hb@xt@ 1.8em{\hss \@makefnmark}\hskip2mm\relax#1}%
+\makeatother
 
 % bibliography
 \usepackage[style=apa,natbib]{biblatex}

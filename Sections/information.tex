@@ -45,7 +45,7 @@ make sure you are familiar enough with them to remember what an abbreviation mea
 Having to look it up every time you see an abbreviation can be quite a pain.
 
 Finally, any text in \textcolor{blue}{blue} is a hyperlink,
-generally leading to more information on whatever is written down.\footnote{~Note that the exact colour depends on Stata's colour scheme, but the default and dark schemes do use blue.}
+generally leading to more information on whatever is written down.\footnote{Note that the exact colour depends on Stata's colour scheme, but the default and dark schemes do use blue.}
 
 \begin{figure}[tbp]\centering
   \caption{Help-file for \texttt{summarize}}\label{fig:hlpsum}
@@ -140,7 +140,7 @@ The \st{help} file for both commands provide a lot more information on both scal
 Also note that, especially for matrices, a lot is possible using Stata's underlying programming language Mata.
 Unless you plan on writing elaborate and complex estimation commands,
 you will likely never need or encounter Mata;
-it is thus beyond the scope of this reader -- for now.\footnote{~At the moment, I do not have a lot experience with Mata yet, either. Although writing a guide on it would likely be a quick way for me to learn it, I do not it would add much value for the reader. I might change my mind about this later, though.}
+it is thus beyond the scope of this reader -- for now.\footnote{At the moment, I do not have a lot experience with Mata yet, either. Although writing a guide on it would likely be a quick way for me to learn it, I do not think it would add much value for this reader. I might change my mind about this later, though.}
 
 \subsubsection{Macros}
 
@@ -172,7 +172,7 @@ We do this by surrounding the local's name by a single opening and closing quote
 Note that you \emph{have} to use the separate opening and closing quote characters,
 using a single closing quote twice --
 as you would in a regular text processor such as Word\footnote{%
-~Most modern text processors automatically change the straight quotes of our keyboard into opening or closing quotes,
+Most modern text processors automatically change the straight quotes of our keyboard into opening or closing quotes,
 depending on the surrounding characters.
 Most programming environments don't:
 you generally aren't writing text in a programming environment, but code.} --
@@ -185,10 +185,10 @@ Suppose you have a large amount of regressions or other estimation commands you 
 all with the same control variables.
 Instead of typing out all the variable names every time,
 we can define a local with the variable names and use that instead.
-\cref{lst:local} does just this, and you can copy the code\footnote{the code is also available to download as a do-file on the reader's GitHub page \href{https://github.com/Ahvns/ETPreader/tree/main/Example\%20do-files}{here}. Later example codes will all be available to download there as well.} into a do-file and try for yourself.
+\cref{lst:local} does just this, and you can copy the code\footnote{The code is also available to download as a do-file on the reader's GitHub page \href{https://github.com/Ahvns/ETPreader/tree/main/Example\%20do-files}{here}. Later example codes will all be available to download there as well.} into a do-file and try for yourself.
 
 \begin{listing}[htp]
-\caption{using a local for control variables}\label{lst:local}
+\caption{local.do}\label{lst:local}
 \inputst{local.do}
 \end{listing}
 \subsection{display}
