@@ -1,7 +1,25 @@
 
-This section is about differrent ways of automating things.
+In this section we'll go over several commands that can be very useful for automating certain bits of code.
+
+\subsection{Grouped command execution}
+One of the easiest ways we can repeat a certain command for different groups of observations is with the \st{bysort} prefix.
+This prefix lets us run the command we use it with for every group defined by a variable separately.
+In my experience it's mostly useful for generating variables in programming,
+but it can also be used as a quick and dirty way to compare variables across groups.
+We can use the prefix like so: \st{bysort varlist: command},
+where \st{varlist} is a list of the variables -- or a single variable --identifying the different groups,
+and \st{command} is the command we would like to run.
+Note that \st{bysort varlist:} is equivalent to using \st{by varlist, sort:}.
+The \st{by} prefix does not work without sorting the data, so it is generally easier to just use \st{bysort}.
+\cref{lst:sort} provides an example.
+
+\begin{listing}[htp]
+\caption{bysort.do}\label{lst:sort}
+\inputst{bysort.do}
+\end{listing}
 
 \subsection{Conditionals}
+
 
 \subsection{loops}
 
