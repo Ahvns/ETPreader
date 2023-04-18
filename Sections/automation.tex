@@ -24,6 +24,83 @@ To put it simply,
 they allow us to differentiate our code based on anything we can turn into an expression that evaluates to true or false.
 Stata recognises two types of if-statements: one as a command suffix,
 and one for programming.
+In this section,
+we'll first go over expressions before we move on to the two types of if-statements.
+
+\subsubsection{Expressions}
+When we use conditionals,
+we set requirements that must hold for code to be executed.
+An expression can then be seen as a check whether these requirements are fulfilled.
+An expression always evaluates to true or false:
+the requirements are met, or they are not.
+In programming, we refer to a data type that has either the value ``true'' or ``false'' as a \emph{boolean}.
+An evaluated expression is precisely that.
+In programming,
+true and false are often represented by $1$ and $0$, respectively.
+This is also the case in Stata:
+if we look at dummy variables,
+for example,
+they function in much the same way.
+A dummy variable for gender is often coded in such a way that it represents either male or female,
+such as a variable \st{female} with value $1$ for females and value $0$ for males.
+
+Expressions are much like mathematical equations,
+in that they have a left-hand side,
+a relational operator,
+and a right-hand side.
+Based on the relational operator,
+the left-hand side is compared to the right-hand side,
+and the expression is evaluated to be true or false.
+Let's take a look at an example.
+Suppose we have two scalars, $a$ and $b$,
+and want to check whether these are equal to one another.
+First, we need to have these scalars defined.
+Let's say that $a=3$ and $b=\pi$:
+\begin{minted}{stata}
+// define scalars
+sca a = 3
+sca b = c(pi)
+
+// inspect the values of the scalars
+di "Scalar a holds value " a
+di "Scalar b holds value " b
+\end{minted}
+We then want Stata to tell us whether $a=b$:
+\begin{minted}[firstnumber=9]{stata}
+// show whether a and b are equal
+di a == b
+\end{minted}
+Of course, clever as we are, we know this to be false.
+This expression should therefore evaluate to false, i.e., $0$.
+When we run this code, we see that, indeed, the last command returns $0$ (see \cref{fig:exp}).
+
+\begin{figure}[tbp]\centering
+    \caption{Stata output for expression code}\label{fig:exp}
+    \includegraphics[width=0.5\textwidth]{expression.png}
+\end{figure}
+
+Of course, we don't always want to know whether things are equal to one another.
+Luckily, there are more relational operators than just \st{==} (equals).
+To see the full list of available operators,
+type \st{help operator} in the command window.
+Furthermore, we may want to set more than one requirement.
+Luckily, we can combine multiple requirements using logic operators -- also listed in \st{help operator}.
+
+Suppose we now want to know whether $a \leq b$.
+We could then tell Stata to tell us whether $a = b$ \emph{or} $b > a$ is true:\footnote{%
+Of course, this can also be achieved using a single $\leq$ operator,
+but for the sake of the example I don't do that here.}
+\begin{minted}[firstnumber=12]{stata}
+// show whether a and b are equal, or b is larger than a
+di a == b | b > a
+\end{minted}
+As $\pi > 3$, this will evaluate to true.
+Try for yourself using the code in \cref{lst:expression}!
+
+\begin{listing}[htp]
+\caption{expression.do}\label{lst:expression}
+\inputst{expression.do}
+\end{listing}
 
 \subsubsection{Command suffix if}
 The command suffix if statement is the simpler of the two.
