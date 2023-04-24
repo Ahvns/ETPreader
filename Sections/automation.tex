@@ -102,44 +102,65 @@ Try for yourself using the code in \cref{lst:expression}!
 \inputst{expression.do}
 \end{listing}
 
+
 \subsubsection{Command suffix if}
 The command suffix if statement is the simpler of the two.
 By adding an if-statement to the end of a command (but before the options!) we tell Stata to only use the specified subset of our data.
-Suppose we have some individual-level data with a dummy variable \st{female} indicating an individual's gender, i.e. it is 1 for females and 0 for males.
-We can then tell a command, such as \st{summarize},
-to only use the observations for female individuals by typing \st{sum varlist if female == 1}.
-As we're using a dummy variable, we could even shorten this to \st{sum varlist if female}!
-This is because our expression, \st{female == 1},
-evaluates either to true or false for each observation.
-A variable containing either true or false is also known as a \emph{boolean} and is generally stored as either a value of 1 (true) or 0 (false).
-Dummy variables are structured in the same way:
-they have a value of 1 if something is true,
-such as an individual's gender being female,
-or 0 if false.
-We can thus exploit this to make much more compact if-statements.
-
-We can also use non-binary variables for our if-statements,
-which allows us to use the full breadth of Stata's relational operators.
-Furthermore, we can combine several if-statements using logic operators,
-such as and, not, and or.
-For the specific characters of each operator, see \st{help operator}.
-The key takeway here is that any expression following \st{if} will evaluate to either true (1) or false (0).
-If the statement evaluates to true for an observation it is used,
-and if it evaluates to false it is left out.
-
-On this note,
-a quick tip for generating dummy variables.
-Often people (including past me) do this in a roundabout way:
+You've likely done this before,
+but let's go over an example.
+First, we'll use one of Stata's example datasets:
 \begin{minted}{stata}
-generate dummy = 1 if expression
-replace dummy = 0 if dummy == . // missing
+// load example dataset
+sysuse auto, clear
+
+// inspect available variables
+describe
 \end{minted}
-As any if-statement already evaluates to either 1 or 0,
-it is much simpler (and cleaner) to write:
+
+Here, the variable \st{foreign} is a dummy variable indicating whether the origin of a car is foreign (value $1$), or domestic (value $0$).
+Suppose now we want some descriptive statistics,
+but only for imported cars.
+We do this by adding an if-statement to the \st{summarize} command that evaluates to true only for foreign cars.
+Before we do this,
+recall the way Stata handles true/false data:
+using the values $1$ and $0$.
+When ``splitting'' our data based on a dummy variable,
+we can exploit this to write very compact if-statements,
+like so:
+\begin{minted}[firstnumber=7]{stata}
+// summary statistics of foreign cars
+sum if foreign
+\end{minted}
+As the dummy already indicates whether it is true that the car is foreign (by taking a value of $1$),
+we no longer have to add a relational operator.
+Of course, we could do so, but it would be redundant;
+we would effectively telling Stata \emph{do }x \emph{if it is true that }y \emph{is true}.
+For illustrative purposes,
+the code to do so here would be \st{sum if foreign == 1}.
+
+Note that we can use this same ``trick'' when generating our own dummy variables.
+Suppose we want to create a dummy indicating whether a car in the dataset is expensive,
+say, has a price equal to or over 10,000\$.\footnote{%
+I'm just going to assume the prices in this dataset are in dollars,
+as the currency isn't really mentioned in the dataset.}
+The way I used to do this is as follows:
 \begin{minted}{stata}
-generate dummy if expression
+// generate dummy for expensive cars
+gen expensive = 1 if price >= 10000
+replace rexpensive = 0 if price < 10000
 \end{minted}
-If you work with a lot of dummy variables, this will save a lot of time!
+But we could actually just write
+\begin{minted}[firstnumber=10]{stata}
+// generate dummy for expensive cars
+gen expensive = price >= 10000
+\end{minted}
+to get exactly the same variable!
+See for yourself using \cref{lst:suffix}.
+
+\begin{listing}[htp]
+\caption{suffix-if.do}\label{lst:suffix}
+\inputst{suffix-if.do}
+\end{listing}
 
 \subsubsection{Programming if}
 Stata's programming if-statements have a multitude of uses.
