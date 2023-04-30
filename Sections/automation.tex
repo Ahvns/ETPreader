@@ -165,50 +165,85 @@ See for yourself using \cref{lst:suffix}.
 \subsubsection{Programming if}
 Stata's programming if-statements have a multitude of uses.
 They allow us to execute bits of code only if a specified expression is true.
-For a single command,
-the syntax is as follows:
+We'll continue with a similar example as in \cref{lst:expression};
+but now we want Stata to tell us whether scalar \st{a} is larger than scalar \st{b}.
+Let's begin with defining the scalars.
+Instead of picking the values ourselves,
+we'll have Stata pick a number for us, ranging from 1--10:\footnote{%
+I use the function \st{runiformint()} for this,
+so that Stata only returns whole numbers, or integers.
+If we want Stata to pick \emph{any} real number instead,
+we could instead use the function \st{runiform()}.}
 \begin{minted}{stata}
-if expression command
+// define scalars
+sca a = runiformint(0, 10)
+sca b = runiformint(0, 10)
 \end{minted}
-where the expression works in the same way as in the suffix if-statement.
-In programming if-statements,
-you probably won't be using variable names,
-but rather locals or scalars that you defined previously.
-Of course,
-you are free to do as you like:
-locals and scalars can also be used in suffix if-statements,
-and variables can be used in programming if-statements,
-although the latter will generally include an observation number to identify a specific value.\footnote{I.e.\ by writing \st{varname[number]} instead of simply \st{varname}}
+We'll also tell Stata to show us the value of both scalars,
+so that we can make sure the expression is evaluated correctly:
+\begin{minted}[firstnumber=5]{stata}
+// display the value of a
+di as text "Scalar a holds value " as result a
+di as text "Scalar b holds value " as result b
+\end{minted}
+Finally, we'll add an if-statement:
+\begin{minted}[firstnumber=9]{stata}
+// display which scalar is larger
+if      a > b   di as text "The largest scalar is " as result "a"
+\end{minted}
 
-We can also include multiple commands in a single if-statement.
-The syntax for this is slightly different:
-\begin{minted}{stata}
-if expression {
-    command1
-    command2
-    ...
-}
+The if-statement can be broken down in three parts.
+First, we tell Stata we want to run some code conditonally,
+so we start our command with \st{if}.
+After writing \st{if}, we add the expression to be evaluated,
+which in this case is \st{a > b}.
+Finally, we end with the command we want Stata to execute if the expression evaluates to true.
+In the example,
+this is a display command telling the user that scalar \st{a} is the larger of the two scalars.
+Note that with our current code,
+if the expression is evaluated to be false,
+Stata will do nothing.
+To change this,
+we can add another line starting with \st{else},
+that tells Stata what to do instead.
+Furthermore,
+we can follow up this \st{else} with another \st{if} to check for other conditions:
+\begin{minted}[firstnumber=11]{stata}
+else if a < b   di as text "The largest scalar is " as result "b"
+else            di as text "Both scalars are equal"
 \end{minted}
-Should the expression evaluate to true,
-Stata will execute all commands enclosed by the curly brackets.
-Note that no command may follow the opening curly bracket (comments are fine) in the same line,
-and the closing curly bracket must have a line just for itself.
-While not necessary,
-I recommend indenting the commands inside a code block like this to keep your code organised.
+In a case like this, when we're exhausting all possible options,
+the final \st{else} does not need an \st{if}:
+if the first two expressions are false,
+then the final possibility, i.e. \st{a == b}, must necessarily be true,
+so we can leave the conditional out.
+Try changing the values of the scalars yourself to see what happens using \cref{lst:if}.
 
-After a programming if-statement,
-we can follow up with \st{else}.
-The code following an else-statement executes when the if-statement is evaluated to be false.
-An else-statement is written in the same way as an if-statement, except no expression is given.
-Using both looks like this:
-\begin{minted}{stata}
-if expression {
-    commands // these are executed if true
-}
-else {
-    othercommands // these are executed if false
-}
-\end{minted}
+\begin{listing}[tbp]
+\caption{programming-if.do}\label{lst:if}
+\inputst{programming-if.do}
+\end{listing}
+
+We can also execute multiple commands following an if-statement.
+To do this, we use code blocks.
+Code blocks are multiple lines of code that ``belong together'',
+and we use curly brackets to denote the start and end of a code block.
+Note that nothing -- other than comments -- can follow an opening curly bracket,
+and the closing curly bracket must be on its own line --
+other than comments after it.
+Furthermore,
+the code in a code block is generally indented to make it clear what belongs together,
+although this is not necessary.
+As an example,
+suppose we again want to compare scalars \st{a} and \st{b},
+but now only want to know the value of the largest one.
+Instead of using \cref{lst:if},
+we could instead use the code in \cref{lst:ifblock}.
+
+\begin{listing}[tbp]
+\caption{programming-if-block.do}\label{lst:ifblock}
+\inputst{programming-if-block.do}
+\end{listing}
 
 \subsection{loops}
 
