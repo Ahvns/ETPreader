@@ -15,6 +15,15 @@
 \usepackage{titlesec}
 \usepackage{placeins}
 
+% section header formatting
+\titleformat{\section}{\Large \bfseries}{\thesection}{1em}{}[\FloatBarrier]
+\titlespacing*{\section}{0ex}{0ex}{1ex}
+\titlespacing*{\subsection}{0ex}{1ex}{0.5ex}
+\titlespacing*{\subsubsection}{0ex}{1ex}{0.25ex}
+
+% float numbering per section
+\counterwithin{figure}{section}
+
 % code blocks
 \usepackage{caption}
 \usepackage[outputdir=build,newfloat]{minted}
@@ -22,6 +31,7 @@
 %\renewcommand\listingscaption{Example code}
 \captionsetup[listing]{position=top, name=Example code}
 \SetupFloatingEnvironment{listing}{name=Example code,listname=Example Code}
+\counterwithin{listing}{section}
 \setminted{
   autogobble=true,
   fontsize=\footnotesize,
@@ -105,10 +115,6 @@
 \begin{document}
 
 \input{Sections/titlepage}
-\titleformat{\section}{\Large \bfseries}{\thesection}{1em}{}[\FloatBarrier]
-\titlespacing*{\section}{0ex}{0ex}{1ex}
-\titlespacing*{\subsection}{0ex}{1ex}{0.5ex}
-\titlespacing*{\subsubsection}{0ex}{1ex}{0.25ex}
 
 \tableofcontents
 \markboth{Contents}{}
