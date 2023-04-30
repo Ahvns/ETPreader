@@ -260,8 +260,115 @@ see \cref{sec:macros}.
 
 \subsubsection{Looping over values}
 
+Looping over values is the most straightforward type of loop.
+It allows us to repeat a piece of code a predefined amount of times,
+while keeping track of the current iteration in a local.
+The command for this type of loop is \st{forvalues}.
+Suppose we want to have Stata show the numbers 1--10.
+We can then run a loop repeating the \st{display} command ten times:
+\begin{minted}{stata}
+// repeat display command ten times
+forvalues i = 1/10 {
+    // display current value of local
+    di as text "Current value: " as result "`i'"
+}
+\end{minted}
+Note that the structure of a loop is similar to that of an if-statement:
+we first declare the loop using \st{forvalues},
+we then have an expression defining over what values we're looping,
+and we finish with a code block containing the code to be repeated.
+
+Before moving on to some more complex examples,
+I'd like to elaborate a bit on the middle part, the expression.
+The syntax of this expression is always \texttt{\textit{localname} = \textit{range}},
+so that we both define the name of the local to keep track of the iterations,
+as well as the range of values (and thus amount of iterations) that the loop covers.
+Make sure that you do not use a localname that is already being used in your current program,
+as the loop would then overwrite the contents of the existing local.
+There are four of ways to define the \texttt{\textit{range}} of values.
+I'd like to highlight two of these here.
+The first of the two, \st{a/b}, is used in the previous example,
+and counts from \st{a} to \st{b} in steps of one.\footnote{%
+Note that this is in steps of \emph{positive} one: a range defined like this only counts ``up''.}
+I'll illustrate the second with another example.
+Suppose we would like to use display only the \emph{odd} number in 1--10.
+To do this, we could construct an if-statement that only displays the current iteration if it is odd,
+or we could ``count'' in steps of two:
+\begin{minted}[firstnumber=7]{stata}
+// using only odd numbers
+forvalues i = 1(2)10 {
+    // display current value of local
+    di as text "Current value: " as result "`i'"
+}
+\end{minted}
+In this case, we use \st{a(b)c} to define our range:
+we count from \st{a} to \st{c}, in steps of \st{b}.
+This also allows us to count down: to do so,
+we choose our values in such a way that $a>c, b<0$.
+
+While looping over a range of numbers might not seem that useful in and of itself,
+if you get creative there is a lot you can do with just this.
+To illustrate, I'll provide a more complex example using almost everything we've learned thus far.
+Before running the code,
+see if you can figure out how it works on your own!
+\begin{minted}[firstnumber=13]{stata}
+/* a more complex example */
+// load example dataset
+sysuse auto, clear
+
+// sort by make of car
+sort make
+
+// obtain the average price using summary statistics
+sum price
+sca avg_price   = r(mean)
+
+// display some information on the first ten cars
+// loop over values 1 to 10
+forvalues i = 1/10 {
+
+    // is it a foreign or domestic car?
+    if foreign[`i'] loc car_origin  = "an imported car"
+    else            loc car_origin  = "a domestic car"
+
+    // is the price above or below average?
+    if price[`i'] > avg_price   loc car_price   = "above average"
+    else                        loc car_price   = "below average"
+
+    // display the information
+    di as result make[`i'] as text " is " as result "`car_origin'" as text ", and its price is " as result "`car_price'" as text "."
+}
+\end{minted}
+
+There is one new ``trick'' I'm using in this code:
+by adding an index to a variable name, I obtain its value for a specific observation,
+like so: \st{varname[index]},
+where \textit{\texttt{varname}} is the name of a variable,
+and \textit{\texttt{index}} is the index number of an observation.\footnote{%
+I might move this to \cref{sec:info} later, as it can be quite a useful trick.}
+So what does the code do, exactly?
+After loading in the data,
+we first sort it alphabetically based on the make of the cars.
+We then obtain the average price and store that value in a scalar.
+After that, we use a loop to go over the first ten observations.
+For each of these, we store in a local whether the care is domestic or foreign,
+and whether its price is above or below average.
+At the end of the loop,
+we display all obtained information, including the make of the car.
+
+\begin{center}\texttt{insert figure with output here}\end{center}
+
+All code used in this specific subsection can be found in \cref{lst:forvalues}.
+
+\begin{listing}[tbp]
+\caption{forvalues.do}\label{lst:forvalues}
+\inputst{forvalues.do}
+\end{listing}
 
 \subsubsection{Looping over items}
 
+\st{foreach}
 
 \subsubsection{Looping until a condition is met}
+
+\st{while}
