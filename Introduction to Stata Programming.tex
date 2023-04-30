@@ -13,6 +13,7 @@
 \usepackage[margin=2.5cm]{geometry}
 
 \usepackage{titlesec}
+\usepackage{placeins}
 
 % code blocks
 \usepackage{caption}
@@ -104,6 +105,10 @@
 \begin{document}
 
 \input{Sections/titlepage}
+\titleformat{\section}{\Large \bfseries}{\thesection}{1em}{}[\FloatBarrier]
+\titlespacing*{\section}{0ex}{0ex}{1ex}
+\titlespacing*{\subsection}{0ex}{1ex}{0.5ex}
+\titlespacing*{\subsubsection}{0ex}{1ex}{0.25ex}
 
 \tableofcontents
 \markboth{Contents}{}
