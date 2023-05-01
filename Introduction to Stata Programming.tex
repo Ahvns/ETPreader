@@ -1,5 +1,7 @@
 % document class settings
 \documentclass[12pt, a4paper]{article}
+% add twoside option for print version
+
 
 % encoding
 \usepackage[utf8]{inputenc}
@@ -11,6 +13,7 @@
 \usepackage[T1]{eulervm}
 \usepackage[scale=0.9]{FiraMono}
 \usepackage[margin=2.5cm]{geometry}
+
 
 \usepackage{titlesec}
 \usepackage{placeins}
@@ -67,9 +70,20 @@
 % header & footer
 \usepackage{fancyhdr}
 \pagestyle{fancy}
-\fancyhead[L]{\small\itshape~Introduction to Stata Programming}%
-\fancyhead[R]{\small\itshape\leftmark~}%
-\fancyfoot[C]{\thepage}%
+% different page headers for print version (twosided)
+\makeatletter
+\if@twoside%
+    \fancyhead[RO]{\small\itshape~Introduction to Stata Programming}%
+    \fancyhead[LE]{\small\itshape\leftmark~}%
+    \fancyhead[LO,RE]{\thepage}%
+    \fancyfoot[C]{}%
+\else%
+    \fancyhead[L]{\small\itshape~Introduction to Stata Programming}%
+    \fancyhead[R]{\small\itshape\leftmark~}%
+    \fancyfoot[C]{\thepage}%
+\fi%
+\makeatother
+
 \setlength{\headheight}{14pt}%
 \renewcommand{\sectionmark}[1]{%
   \markboth{#1}{}}%
@@ -115,7 +129,13 @@
 \begin{document}
 
 \input{Sections/titlepage}
-
+% different margins for print version (twosided)
+\makeatletter
+\if@twoside%
+    \newgeometry{inner=1.75cm,outer=3.25cm,top=2.5cm,bottom=2.5cm}
+    \setcounter{page}{1}
+\fi%
+\makeatother
 \tableofcontents
 \markboth{Contents}{}
 

@@ -351,7 +351,7 @@ After loading in the data,
 we first sort it alphabetically based on the make of the cars.
 We then obtain the average price and store that value in a scalar.
 After that, we use a loop to go over the first ten observations.
-For each of these, we store in a local whether the care is domestic or foreign,
+For each of these, we store in a local whether the car is domestic or foreign,
 and whether its price is above or below average.
 At the end of the loop,
 we display all obtained information, including the make of the car.
@@ -367,7 +367,24 @@ All code used in this specific subsection can be found in \cref{lst:forvalues}.
 
 \subsubsection{Looping over items}
 
-\st{foreach}
+Where \st{forvalues} loops over numbers in a range,
+the command \st{foreach} loops over \emph{items} in a \emph{list}.
+There are multiple types of list we can use for this,
+but in my experience the most common are a local and a \texttt{\textit{varlist}},
+so we'll focus on these two for now.\footnote{%
+The other types function similarly, but I recommend taking a look at \st{help foreach} for the specific differences.}
+The syntax of \st{foreach} consists of four parts,
+rather than three like \st{forvalues} does.
+Again, I'll illustrate using an example.
+
+% use this open data as example? preferably english data instead
+%\begin{minted}{stata}
+%// load in data
+%import excel "https://cms.onderzoek-en-statistiek.nl/uploads/data_arbeid_en_inkomen_12a27fdc3c.xlsx"
+%
+%\end{minted}
+
+
 
 \subsubsection{Looping until a condition is met}
 
